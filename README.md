@@ -13,4 +13,6 @@
 <li>RSP Game : Rocket Scessiors Paper Game made by C++ </li>
 <li>Systeme Login : Simple login and acconts creator to acsses to a basics informations {data are saved in RAM}</li>
 <li>Table Formator : Simple Table string Creator with Three Colones</li>
+<li>Encryption / De encryption app : made to Encrypt texts using ascl values</li>
+<li>FileManger : Console application that can edit and Creat Files</li>
 </ul>
