@@ -27,5 +27,8 @@ Example :
             |---------------|---------------------------------------------|---------------|
             |4              |Lana franck                                  |France         |
             |---------------|---------------------------------------------|---------------|</pre>
+
+<h1>Help page : </h1>
+<a href = "https://github.com/mdelhajaji2000/ProjectsCpp/blob/main/Table%20Formater/.Help">.Help<a>
 </body>
 </html>
