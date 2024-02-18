@@ -1,7 +1,7 @@
 #include <iostream>    /*--Console application--*/
 #include <vector>      /*--VERSION : 2.0.1-BETA--*/
 #include <algorithm>   /*--Made By : [insta : mdelhajaji2000]--*/
-using namespace std;   /*--this app is not secure by any librarie*/
+using namespace std; 
 
 int Iindex = 0;
 int main(); // Problemes will be fixed in next version {V3 Soon...!}
