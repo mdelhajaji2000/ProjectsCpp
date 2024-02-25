@@ -550,4 +550,4 @@ string SeparatorGenerator(int lenght = 120)
 		str += "-";
 	}
 	return str;
-}
+} //
