@@ -53,18 +53,19 @@ void ReadPositifNumber(int &number, string Message) {
     cin >> number;
     while (number < 0 || cin.fail()) {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin >> ws;
         cout << Message;
         cin >> number;
     }
 }
 
+
 bool Continue_Prosses(string Message) {
-    cout << Message;
     char IS;
+    cout << Message;
     cin >> IS;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    return (IS == 'Y' || IS == 'y');
+    if (IS == 'Y' || IS == 'y') return true;
+    else return false;
 }
 
 string rowSpace(int col1_size = 15, int main_size = 45, int col2_size = 15, char CharTyp = '=') {
@@ -127,9 +128,10 @@ string Add_title_Row(stTable Table) {
 
 string table_Head(stTable Table) {
     string Space = rowSpace(Table.Colone_1_width, Table.Colone_2_width, Table.Colone_3_width, Table.Space_char);
-    readInput(Table.Colone_1_title, "enter Colone 1 title => ");
-    readInput(Table.Colone_2_title, "enter Colone 2 Title => ");
-    readInput(Table.Colone_3_title, "enter Colone 3 Title => ");
+
+    readInput(Table.Colon_1_string, "[Colone 1 Title] {length must be < " + to_string(Table.Colone_1_width) + "}\n= > ");
+    readInput(Table.Colone_2_String, "[Colone 2 Title] {length must be < " + to_string(Table.Colone_2_width) + "}\n = > ");
+    readInput(Table.Colone_3_string, "[Colone 3 Title] {length must be < " + to_string(Table.Colone_3_width) + "}\n = > ");
 
     string head = Add_title_Row(Table);
     string _table_head = Space + head + Space;
@@ -306,6 +308,7 @@ void main_menu() {
     int user_choice;
     ReadPositifNumber(user_choice, "=> ");
     FunctionsManger(user_choice);
+    main_menu();
 }
 
 void FileContentPrinter(string path)
