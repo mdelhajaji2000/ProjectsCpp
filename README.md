@@ -15,4 +15,6 @@
 <li>Table Formator : Simple Table string Creator with Three Colones</li>
 <li>Encryption / De encryption app : made to Encrypt texts using ascl values</li>
 <li>FileManger : Console application that can edit and Creat Files</li>
+<li>Bank : Console app that contain a simple Bank system with Extentions in other versions</li>
+<li>Git : Programme that Sync The Repo by one click</li>
 </ul>
