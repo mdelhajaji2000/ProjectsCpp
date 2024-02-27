@@ -44,6 +44,12 @@ void readString(string& str)
 	getline(cin, str);
 }
 
+string PrintTaskStatus(bool TaskSt)
+{
+	if (TaskSt) return "Done";
+	return "Not Done Yet";
+}
+
 bool stringToBool(string str)
 {
 	if (str == "true" || str == "1") return true;
@@ -167,8 +173,8 @@ void AddTaskScreen(vector<stData>& TaskData)
 
 void EndScreen()
 {
-	cout << "Press Any Key To Close...";
-	system("pause<0");
+	cout << "Press Any Key To Close..." << endl;
+	system("pause>0");
 	system("cls");
 }
 
@@ -217,6 +223,80 @@ void RemoveTasckScreen(vector<stData> &TaskData)
 	system("pause>0");
 }
 
+void ShowTaskDetailsScreen(vector<stData> TaskData)
+{
+	cout << SeparatorGen(120) << endl;
+	cout << setw(50) << " " << "Show Task details Screen" << endl;
+	cout << SeparatorGen(120) << endl;
+	cout << "\n\n\n";
+	cout << left;
+	cout << CYAN;
+	cout << setw(40) << " " << "------------------------------------------------" << endl;
+	cout << setw(40) << " " << "| Task Number |" << setw(32) << " Task Detail" << "|" << endl;
+	cout << setw(40) << " " << "------------------------------------------------" << endl;
+
+	for (int i = 0; i < TaskData.size(); i++)
+	{
+		cout << setw(40) << " " << "|" << setw(13) << i + 1 << "|" << setw(32) << TaskData.at(i).Task << "|" << endl;
+	}
+
+	cout << setw(40) << " " << "------------------------------------------------" << endl;
+	cout << RESET;
+
+	cout << "enter Task Number : " << endl;
+	int Accnum;
+	cin >> Accnum;
+	cin.ignore();
+	bool IsFound;
+	try // Apre on va ajouter account number to stdata pour ne pas utiliser try
+	{
+		string test;
+		test = TaskData.at(Accnum - 1).Task;
+		IsFound = true;
+	}
+	catch (const std::out_of_range)
+	{
+		cout << "Task Not Found ...!" << endl;
+		IsFound = false;
+	}
+
+	if (IsFound)
+	{
+		cout << "Task details : " << endl;
+		cout << "~ Task : " << TaskData.at(Accnum - 1).Task << endl;
+		cout << "~ Created on : " << TaskData.at(Accnum - 1).CreatDate << endl;
+		cout << "~ Dead Line : " << TaskData.at(Accnum - 1).DeadLine << endl;
+		cout << "~ Task Satatus : ";
+		if (TaskData.at(Accnum - 1).TaskStatus) cout << GREEN;
+		else cout << RED;
+		cout << PrintTaskStatus(TaskData.at(Accnum - 1).TaskStatus) << RESET << endl;
+	}
+	cout << "Press Any Key To Continue ...!" << endl;
+	system("pause>0");
+}
+
+void ShowAllTasksScreen(vector<stData>& TaskData)
+{
+	cout << SeparatorGen(120) << endl;
+	cout << setw(50) << " " << "Show " << TaskData.size() << " Tasks Screen" << endl;
+	cout << SeparatorGen(120) << endl;
+	cout << "\n\n\n" << endl;
+	cout << left;
+	cout << SeparatorGen(120) << endl;
+	cout << "|" << setw(14) << " Task Number" << "|" << setw(44) << "                       Task" << "|" << setw(26) << "        Created Date " << "|" << setw(17) << "     Dead Line" << "|" << setw(12) << " Task status " << "|" << endl;
+	cout << SeparatorGen(120) << endl;
+	for (int i = 0; i < TaskData.size(); i++)
+	{
+		cout << "|" << setw(14) << i + 1 << "|" << setw(44) << TaskData.at(i).Task << "|" << setw(26) << TaskData.at(i).CreatDate << "|" << setw(17) << TaskData.at(i).DeadLine << "|";
+		if (TaskData.at(i).TaskStatus) cout << GREEN;
+		else cout << RED;
+		cout << setw(12) << PrintTaskStatus(TaskData.at(i).TaskStatus) << RESET << " |" << endl;
+	}
+	cout << SeparatorGen(120) << "\n" << endl;
+	cout << "Presse Any Key To continue...!";
+	system("pause>0");
+}
+
 void MainMenu(vector<stData> &Task_Data)
 {
 	while(true)
@@ -248,10 +328,12 @@ void MainMenu(vector<stData> &Task_Data)
 			RemoveTasckScreen(Task_Data);
 			break;
 		case 3:
-
+			system("cls");
+			ShowTaskDetailsScreen(Task_Data);
 			break;
 		case 4:
-
+			system("cls");
+			ShowAllTasksScreen(Task_Data);
 			break;
 		case 5:
 			exit(0);
