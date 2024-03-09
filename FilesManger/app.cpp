@@ -284,7 +284,7 @@ void FileManger()
         break;
     case 5319:
     cout << "~~~Source Code~~~" << endl;
-        PrintFileContent("C:\\Users\\mdelh\\Documents\\fundamontal.cpp\\github_C++_projects\\Myprojects\\ProjectsCpp\\FilesManger\\app.cpp");
+        PrintFileContent("C:\\Users\\mdelh\\Documents\\fundamontal.cpp\\GithubProjects\\ProjectsCpp\\FilesManger\\app.cpp");
     default:
     cout << "undefined command" << endl;
         break;
