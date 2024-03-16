@@ -93,11 +93,7 @@ string ReadString(string Message)
 	string str;
 	cout << Message;
 	cin.clear();
-	static int used = 0; // This variable used to know that if cin.ignor was used or not! 
-	//if (used < 1) cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard any characters left in the input buffer
-	
 	getline(cin, str);
-	used++;
 	return str;
 }
 
