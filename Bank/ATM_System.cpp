@@ -4,6 +4,8 @@
 #include <string>
 #include <limits>
 #include <iomanip>
+
+#include "Encryption.h"
 // ATM System using C++
 
 using namespace std;
@@ -18,7 +20,7 @@ using namespace std;
 #define CYAN    "\033[36m"
 #define WHITE   "\033[37m"
 
-const string ClientDataBasePath = R"(C:\Users\mdelh\Documents\fundamontal.cpp\vs-community\BankExtension\Bank_Clients.database)";
+const string ClientDataBasePath = "Bank_Clients.database";
 struct stClients
 {
 	string Account_number;
@@ -80,13 +82,14 @@ vector<string> SplitVector(string Line, string Delim)
 void LoadLinesToUersStruct(vector<string>& vLines)
 {
 	fstream Myfile;
+	Enctyption Encryptor;
 	Myfile.open(ClientDataBasePath, ios::in);
 	if (Myfile.is_open())
 	{
 		string Line;
 		while (getline(Myfile, Line))
 		{
-			vLines.push_back(Line);
+			vLines.push_back(Encryptor.Denc(Line));
 		}
 		Myfile.close();
 	}
@@ -106,10 +109,11 @@ void LoadDataToVector(vector<stClients>& vClients)
 
 string ExportDataToLine(stClients Data, string Delim = "#//#")
 {
+	Enctyption Encryptor;
 	string Line = "";
 	Line += Data.Account_number + Delim + Data.PinCode + Delim
 		+ Data.Name + Delim + Data.Phone + Delim + to_string(Data.AccountBalance) + Delim;
-	return Line;
+	return Encryptor.Enc(Line);
 }
 
 
