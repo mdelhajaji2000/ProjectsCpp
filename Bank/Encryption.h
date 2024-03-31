@@ -4,7 +4,7 @@
 
 using namespace std;
 
-class Enctyption {
+class clsEncryption {
 private :
 	int _EnKey1 = 656574847;
 	int _Enkey2 = 90094;

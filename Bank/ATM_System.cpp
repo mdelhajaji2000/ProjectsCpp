@@ -82,7 +82,7 @@ vector<string> SplitVector(string Line, string Delim)
 void LoadLinesToUersStruct(vector<string>& vLines)
 {
 	fstream Myfile;
-	Enctyption Encryptor;
+	clsEncryption Encryptor;
 	Myfile.open(ClientDataBasePath, ios::in);
 	if (Myfile.is_open())
 	{
@@ -109,7 +109,7 @@ void LoadDataToVector(vector<stClients>& vClients)
 
 string ExportDataToLine(stClients Data, string Delim = "#//#")
 {
-	Enctyption Encryptor;
+	clsEncryption Encryptor;
 	string Line = "";
 	Line += Data.Account_number + Delim + Data.PinCode + Delim
 		+ Data.Name + Delim + Data.Phone + Delim + to_string(Data.AccountBalance) + Delim;

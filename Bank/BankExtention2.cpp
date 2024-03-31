@@ -959,6 +959,7 @@ stUsers GetUSerByUsername(vector<stUsers> vUsers, string Username)
 	{
 		if (vUsers.at(i).UserName == Username) return vUsers.at(i);
 	}
+	return vUsers.at(0);
 }
 
 stUsers	LogInScreen(vector<stUsers> &Users)

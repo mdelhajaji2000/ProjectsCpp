@@ -89,6 +89,18 @@ bool Continue_Processe(string Message)
 	return C;
 }
 
+
+string SeparatorGenerator(int lenght)
+{
+	string str;
+	for (int i = 0; i < lenght; i++)
+	{
+		str += "-";
+	}
+	return str;
+} //
+
+
 void StartUpScreen(vector<stUsers> &vUsers)
 {
     stUsers FrsitUser;
@@ -179,7 +191,7 @@ vector<string> SplitVector(string Line, string Delim)
 
 void LoadLinesToUersStruct(vector<string>& vLines)
 {
-    Enctyption Encryptor;
+    clsEncryption Encryptor;
 	fstream Myfile;
 	Myfile.open(ClientDataBasePath, ios::in);
 	if (Myfile.is_open())
@@ -207,7 +219,7 @@ void LoadDataToVector(vector<stData>& vClients)
 
 string ExportDataToLine(stData Data, string Delim = "#//#")
 {
-    Enctyption Encryptor;
+    clsEncryption Encryptor;
 	string Line = "";
 	Line += Data.Account_number + Delim + Data.PinCode + Delim
 		+ Data.Name + Delim + Data.Phone + Delim + to_string(Data.AccountBalance) + Delim;
@@ -1033,7 +1045,7 @@ void LoadUsersToVector(vector<stUsers>& vUsers)
 string UsersDataToRecord(stUsers User)
 {
 	string Delimiter = "#//#";
-    Enctyption Encryptor;
+    clsEncryption Encryptor;
 	return Encryptor.Enc(User.UserName + Delimiter + User.CodePin + Delimiter + to_string(User.Permissions));
 }
 
@@ -1054,7 +1066,7 @@ void UploadUsersDataToFile(vector<stUsers> &vUsers)
 void LoadRecordsToUsersStruct(vector<string>& vLines)
 {
 	fstream Myfile;
-    Enctyption Encryptor;
+    clsEncryption Encryptor;
 	Myfile.open(UsersDataBasePath, ios::in);
 	if (Myfile.is_open())
 	{
@@ -1094,12 +1106,3 @@ int main()
 	return 0;
 }
 
-string SeparatorGenerator(int lenght)
-{
-	string str;
-	for (int i = 0; i < lenght; i++)
-	{
-		str += "-";
-	}
-	return str;
-} //

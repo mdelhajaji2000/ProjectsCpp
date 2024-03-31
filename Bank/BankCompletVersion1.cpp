@@ -4,8 +4,9 @@
 #include <string>
 #include <limits>
 #include <iomanip>
-// #xtension Version with Transaction
-
+#include "Encryption.h"
+// Extension Version with Transaction
+// Extention Version with Encryption
 using namespace std;
 
 // ANSI escape codes for text colors
@@ -60,7 +61,7 @@ int ReaduserChoice();
 void Mainmenu(vector<stData>& vClients, vector<stUsers>& vUsers);
 void PrintUserRow(stUsers User);
 void PrintUsersList(const vector<stUsers> vUsers);
-stUsers ReadUserData(vector<stUsers> User);
+stUsers ReadUserData(vector<stUsers> User, bool readPermessions);
 void AddUserScreen(vector<stUsers>& vUsers);
 void UsersManger(vector<stUsers>& vUsers);
 bool CheckUserName(vector<stUsers> Users, string Username);
@@ -76,7 +77,7 @@ void UpdateVector(vector<stUsers>& vUsers);
 int main();
 string SeparatorGenerator(int lenght = 120);
 bool CheckPermession(stUsers User, int FunctionID); // Function ID the Function Permession Number get in Reada Permession
-												    // Every Function or Choice in MainMenu Screen got a number like "[1] Clients List"...  
+ // Every Function or Choice in MainMenu Screen got a number like "[1] Clients List"...  
 
 
 
@@ -87,6 +88,36 @@ bool Continue_Processe(string Message)
 	cin >> C;
 	return C;
 }
+
+
+string SeparatorGenerator(int lenght)
+{
+	string str;
+	for (int i = 0; i < lenght; i++)
+	{
+		str += "-";
+	}
+	return str;
+} //
+
+
+void StartUpScreen(vector<stUsers> &vUsers)
+{
+    stUsers FrsitUser;
+    if (vUsers.empty())
+    {
+        cout << SeparatorGenerator(120);
+        cout << setw(50) << " " << "Startup" << endl;
+        cout << SeparatorGenerator(120);
+
+        cout << GREEN << "Frist Please setUp a Administrator User" << RESET << endl;
+        FrsitUser = ReadUserData(vUsers, false);
+        FrsitUser.Permissions = -1;
+        vUsers.push_back(FrsitUser);
+        UploadUsersDataToFile(vUsers);
+    }
+}
+
 
 string ReadString(string Message)
 {
@@ -160,6 +191,7 @@ vector<string> SplitVector(string Line, string Delim)
 
 void LoadLinesToUersStruct(vector<string>& vLines)
 {
+    clsEncryption Encryptor;
 	fstream Myfile;
 	Myfile.open(ClientDataBasePath, ios::in);
 	if (Myfile.is_open())
@@ -167,7 +199,7 @@ void LoadLinesToUersStruct(vector<string>& vLines)
 		string Line;
 		while (getline(Myfile, Line))
 		{
-			vLines.push_back(Line);
+			vLines.push_back(Encryptor.Denc(Line));
 		}
 		Myfile.close();
 	}
@@ -187,10 +219,11 @@ void LoadDataToVector(vector<stData>& vClients)
 
 string ExportDataToLine(stData Data, string Delim = "#//#")
 {
+    clsEncryption Encryptor;
 	string Line = "";
 	Line += Data.Account_number + Delim + Data.PinCode + Delim
 		+ Data.Name + Delim + Data.Phone + Delim + to_string(Data.AccountBalance) + Delim;
-	return Line;
+	return Encryptor.Enc(Line);
 }
 
 void addClientRow(const stData& Data)
@@ -545,6 +578,18 @@ int ReaduserChoice()
 	return userChoice;
 }
 
+void ATM_System()
+{
+    cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    cout << SeparatorGenerator(120) << endl;
+    cout << setw(56) << " " << "==ATM Window Is Opened !==" << endl;
+    cout << SeparatorGenerator(120) << endl;
+
+    system("ATM_System.exe");
+    cout << "\n\n\n\n" << endl;
+    EndScreen();
+}
+
 void UsersManger(vector<stUsers> &vUsers);
 
 void Mainmenu(vector<stData>& vClients, vector<stUsers> &vUsers, stUsers User) // User = Loged In user or The Actual User
@@ -565,8 +610,9 @@ void Mainmenu(vector<stData>& vClients, vector<stUsers> &vUsers, stUsers User) /
 		cout << setw(50) << " " << "[5] Find Client." << endl;
 		cout << setw(50) << " " << "[6] Transection." << endl;
 		cout << setw(50) << " " << "[7] Manage User." << endl;
-		cout << setw(50) << " " << "[8] Log out." << endl;
-		cout << setw(50) << " " << "[9] Exit and Close." << endl;
+		cout << setw(50) << " " << "[8] ATM." << endl;
+        cout << setw(50) << " " << "[9] Log out." << endl;
+		cout << setw(50) << " " << "[10] Exit and Close." << endl;
 		cout << SeparatorGenerator(120);
 		int userchoice = ReaduserChoice();
 		cin.ignore();
@@ -601,12 +647,16 @@ void Mainmenu(vector<stData>& vClients, vector<stUsers> &vUsers, stUsers User) /
 			if (CheckPermession(User, 7)) UsersManger(vUsers);
 			break;
 		case 8:
-			system("cls");
-			return;
+        system("cls");
+			ATM_System();
 			break;
 		case 9:
-			exit(0);
+			system("cls");
+            return;
 			break;
+        case 10:
+            exit(0);
+            break;
 		default:
 			cout << "unvalid choice...!";
 			break;
@@ -641,7 +691,7 @@ void PrintUsersList(const vector<stUsers> vUsers)
 	EndScreen();
 }
 
-stUsers ReadUserData(vector<stUsers> vUsers)
+stUsers ReadUserData(vector<stUsers> vUsers, bool readPermessions = true)
 {
 	stUsers User;
 	bool Continue = false;
@@ -661,7 +711,8 @@ stUsers ReadUserData(vector<stUsers> vUsers)
 		if (Continue)
 		{
 			User.CodePin = ReadString("Creat a Code Pin : ");
-			User.Permissions = ReadPermissions(User);
+			if (readPermessions)User.Permissions = ReadPermissions(User);
+            else User.Permissions = 0; // No Permessions Only Main Menu Screen Show !
 		}
 	}
 	return User;
@@ -677,7 +728,7 @@ void AddUserScreen(vector<stUsers> &vUsers)
 		cout << Separator << endl;
 		cout << setw(45) << " " << "Manage Users : Add new User" << endl;
 		cout << Separator << endl;
-		vUsers.push_back(ReadUserData(vUsers));
+		vUsers.push_back(ReadUserData(vUsers, true));
 		UploadUsersDataToFile(vUsers);
 		cout << "user add Successufly !" << endl;
 		Continue = Continue_Processe("Do you want to add another user ? : {1 = yes} {0 = no} : ");
@@ -994,7 +1045,8 @@ void LoadUsersToVector(vector<stUsers>& vUsers)
 string UsersDataToRecord(stUsers User)
 {
 	string Delimiter = "#//#";
-	return User.UserName + Delimiter + User.CodePin + Delimiter + to_string(User.Permissions);
+    clsEncryption Encryptor;
+	return Encryptor.Enc(User.UserName + Delimiter + User.CodePin + Delimiter + to_string(User.Permissions));
 }
 
 void UploadUsersDataToFile(vector<stUsers> &vUsers)
@@ -1014,13 +1066,14 @@ void UploadUsersDataToFile(vector<stUsers> &vUsers)
 void LoadRecordsToUsersStruct(vector<string>& vLines)
 {
 	fstream Myfile;
+    clsEncryption Encryptor;
 	Myfile.open(UsersDataBasePath, ios::in);
 	if (Myfile.is_open())
 	{
 		string Line;
 		while (getline(Myfile, Line))
 		{
-			vLines.push_back(Line);
+			vLines.push_back(Encryptor.Denc(Line));
 		}
 		Myfile.close();
 	}
@@ -1035,11 +1088,12 @@ void UpdateVector(vector<stUsers>& vUsers) // Clear the vector an push the Clien
 
 void LogIn()
 {
+	
 	vector<stData> vClients;
 	vector<stUsers> vUsers;
 	LoadDataToVector(vClients);
 	LoadUsersToVector(vUsers);
-
+    StartUpScreen(vUsers);
 	while (true)
 	{
 		Mainmenu(vClients, vUsers, LogInScreen(vUsers));
@@ -1053,12 +1107,3 @@ int main()
 	return 0;
 }
 
-string SeparatorGenerator(int lenght)
-{
-	string str;
-	for (int i = 0; i < lenght; i++)
-	{
-		str += "-";
-	}
-	return str;
-} //
